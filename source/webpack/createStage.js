@@ -1,30 +1,48 @@
 const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
-let path = require('path');
+var path = require('path');
+const os = require('os');
 
 module.exports = (env, options) => {
-  process.env.STAGE = env.dev === true ? 'dev' : 'prod';
-  let gitRevisionPlugin = new GitRevisionPlugin();
-  let rootPath = path.join(__dirname, '..');
+  process.env.STAGE = env;
+  var gitRevisionPlugin = new GitRevisionPlugin();
+  var rootPath = path.join(__dirname, '..', '..');
 
-  let webappStageConfig = require(path.join(
+  var webappConfig = require(path.join(
     rootPath,
+    'source',
     'data',
-    process.env.STAGE + '.accesspages'
+    'config.webapp'
   ));
-  let webappConfig = require(path.join(rootPath, 'data', 'config.webapp'));
+  var webappDevConfig = require(path.join(
+    rootPath,
+    'source',
+    'data',
+    'dev.config'
+  ));
+  var webappProdConfig = require(path.join(
+    rootPath,
+    'source',
+    'data',
+    'prod.config'
+  ));
 
-  let config = {
+  var webappStageConfig = {
+    dev: JSON.stringify(webappDevConfig),
+    prod: JSON.stringify(webappProdConfig),
+    NODE_ENV: options.mode,
     STAGE: process.env.STAGE,
-    FAVICON: process.env.FAVICON,
     BUILD_TIMESTAMP: Date.now(),
-    VERSION: gitRevisionPlugin.version(),
-    COMMIT: gitRevisionPlugin.commithash(),
-    BRANCH: gitRevisionPlugin.branch()
+    OS: os.type(),
+    DEV_TOOL: env === 'dev' ? options.devtool !== false : false,
   };
 
-  Object.assign(config, webappStageConfig, webappConfig);
+  webappConfig.VERSION = gitRevisionPlugin.version();
+  webappConfig.COMMIT = gitRevisionPlugin.commithash();
+  webappConfig.BRANCH = gitRevisionPlugin.branch();
 
-  console.log('webappStageConfig', config);
+  Object.assign(webappStageConfig, webappConfig);
 
-  return config;
+  console.log('webappStageConfig', webappStageConfig);
+
+  return webappStageConfig;
 };

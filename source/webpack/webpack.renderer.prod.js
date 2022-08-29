@@ -9,44 +9,37 @@ var path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env, options) => {
-  console.log('BUILD', env, options);
   const webpackConfig = common(env, options);
   const webappStageConfig = createStage(env, options);
   var rootPath = path.join(__dirname, '..', '..');
 
   return merge(webpackConfig, {
     mode: 'production',
-    target: 'web',
-    entry: {
-      app: path.resolve(__dirname, '../', 'app', 'webapp', 'src', 'index.tsx')
-    },
+    target: 'electron-preload',
+    entry: path.join(rootPath, 'source', 'app', 'webapp', 'src', 'index.tsx'),
     output: {
       path: path.resolve(__dirname, '../', '../', 'build'),
+      filename: 'app.min.js',
       publicPath: '/',
-      filename: '[name].min.js'
+    },
+    node: {
+      __dirname: false,
+      __filename: false,
     },
     optimization: {
       minimize: true,
-      usedExports: true,
       minimizer: [
         new TerserPlugin({
-          include: /\.min\.(js|scss)$/
-        })
-      ]
+          include: /\.min\.js$/,
+        }),
+      ],
     },
     plugins: [
-      new webpack.ProvidePlugin({
-        process: 'process/browser'
-      }),
       new webpack.EnvironmentPlugin(webappStageConfig),
       new GitRevisionPlugin(),
       new HtmlWebpackPlugin({
         inject: true,
-        FAVICON:
-          `<link rel="shortcut icon" type="image/png" href="data:image/png;base64,` +
-          webappStageConfig.FAVICON +
-          `"/>`,
-        SCRIPT_APP: `<script src="app.min.js"></script>`,
+        SCRIPT: `<script src="app.min.js"></script>`,
         APP_NAME: webappStageConfig.APP_NAME,
         template: path.join(
           rootPath,
@@ -56,8 +49,8 @@ module.exports = (env, options) => {
           'src',
           'index.html'
         ),
-        filename: './index.html'
-      })
-    ]
+        filename: './index.html',
+      }),
+    ],
   });
 };

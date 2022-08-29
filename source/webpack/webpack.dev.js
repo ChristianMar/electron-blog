@@ -1,25 +1,26 @@
 /*eslint-disable*/
-const webpack = require('webpack');
+var webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
 const common = require('./webpack.common.js');
 const createStage = require('./createStage.js');
-const path = require('path');
+var path = require('path');
+const { spawn } = require('child_process');
 
 module.exports = (env, options) => {
-  console.log('DEV', env, options);
   const webpackConfig = common(env, options);
   const webappStageConfig = createStage(env, options);
-  const rootPath = path.join(__dirname, '..', '..');
+  var rootPath = path.join(__dirname, '..', '..');
 
   return merge(webpackConfig, {
     entry: path.join(rootPath, 'source', 'app', 'webapp', 'src', 'index.tsx'),
     mode: 'development',
     devtool: 'inline-source-map',
+    target: 'electron-main',
     devServer: {
       static: {
-        directory: path.join(rootPath, 'source', 'app', 'webapp', 'src')
+        directory: path.join(rootPath, 'source', 'app', 'webapp', 'src'),
       },
       compress: true,
       port: 9000,
@@ -34,20 +35,22 @@ module.exports = (env, options) => {
       // inline: true,
       // disable hot reload
       liveReload: false,
-      hot: false
+      hot: false,
+      onListening: () => {
+        spawn('electron', ['.'], {
+          shell: true,
+          env: process.env,
+          stdio: 'inherit',
+        })
+          .on('close', (code) => process.exit(0))
+          .on('error', (spawnError) => console.error(spawnError));
+      },
     },
     plugins: [
-      new webpack.ProvidePlugin({
-        process: 'process/browser'
-      }),
       new webpack.EnvironmentPlugin(webappStageConfig),
       new GitRevisionPlugin(),
       new HtmlWebpackPlugin({
         inject: true,
-        FAVICON:
-          `<link rel="shortcut icon" type="image/png" href="data:image/png;base64,` +
-          webappStageConfig.FAVICON +
-          `"/>`,
         APP_NAME: webappStageConfig.APP_NAME,
         template: path.join(
           rootPath,
@@ -56,8 +59,9 @@ module.exports = (env, options) => {
           'webapp',
           'src',
           'index.html'
-        )
-      })
-    ]
+        ),
+        filename: './index.html',
+      }),
+    ],
   });
 };
