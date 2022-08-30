@@ -25,9 +25,11 @@ https://localhost:9000/
 You can also build the app with these commands:
 
 ```
-yarn build-dev (for dev)
-yarn build-uat (for uat)
-yarn build-prod (for prod)
+yarn build (to create the build)
+yarn package-mac (to create the executable for mac)
+yarn package-linux (to create the executable for linux)
+yarn package-windows (to create the executable for windows)
+yarn show-package-mac (to decompress the asar file)
 ```
 
 ## external package
