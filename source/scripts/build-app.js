@@ -67,29 +67,22 @@ describe()
 
     let config = {
       appId: data.PACKAGE,
-      productName: `${data.PROJECT}-admin`,
+      productName: `${data.PROJECT}`,
       copyright: `Copyright © ${new Date().getFullYear()} ${
         data.APP_NAME
       }. All rights reserved`,
       buildVersion: buildName === 'win' ? version.replace('v', '') : version,
-      files: [
-        '!**/node_modules/**/*',
-        {
-          from: './app/webapps/src/',
-          to: '.',
-          filter: ['package.json'],
-        },
-      ],
+      files: ['build', 'node_modules', 'package.json'],
       directories: {
         output: `release-${buildName}`,
         buildResources: 'build',
       },
-      extraMetadata: {
-        main: 'build/background.min.js',
-      },
+      // extraMetadata: {
+      //   main: 'build/background.min.js',
+      // },
       linux: {
         target: linuxTargets,
-        artifactName: `${data.PROJECT}-admin${'-${arch}.${ext}'}`,
+        artifactName: `${data.PROJECT}${'-${arch}.${ext}'}`,
         icon: 'source/icons/linux',
         category: 'Office',
         maintainer: data.PROJECT,
@@ -97,7 +90,7 @@ describe()
       },
       win: {
         target: winTargets,
-        artifactName: `${data.PROJECT}-admin${'-${arch}.${ext}'}`,
+        artifactName: `${data.PROJECT}${'-${arch}.${ext}'}`,
         icon: 'source/icons/win/icon.ico',
         legalTrademarks: `Copyright © ${new Date().getFullYear()} ${
           data.APP_NAME
@@ -107,14 +100,14 @@ describe()
         oneClick: true,
         perMachine: false,
         allowElevation: true,
-        uninstallDisplayName: `${data.PROJECT}-admin`,
+        uninstallDisplayName: `${data.PROJECT}`,
         installerIcon: 'source/icons/win/icon.ico',
         // license: 'txt'
       },
       mac: {
         category: 'public.app-category.productivity',
         target: macTargets,
-        artifactName: `${data.PROJECT}-admin${'-${arch}.${ext}'}`,
+        artifactName: `${data.PROJECT}${'-${arch}.${ext}'}`,
         icon: 'source/icons/mac/icon.icns',
         minimumSystemVersion: '10.6.0',
         hardenedRuntime: true,
@@ -131,7 +124,7 @@ describe()
         log.success(
           `Build ${
             data.PROJECT
-          }-admin, version ${version}, building for: ${buildTarget}, in folder: release-${buildName}, ${
+          }, version ${version}, building for: ${buildTarget}, in folder: release-${buildName}, ${
             publish === 'never' ? '' : 'and publishing'
           } COMPLETE!`
         );

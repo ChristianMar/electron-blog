@@ -25,6 +25,8 @@ function createWindow() {
     },
   });
 
+  console.log('argv', process.argv);
+
   mainWindow.loadURL(
     isDev
       ? 'https://localhost:9000'

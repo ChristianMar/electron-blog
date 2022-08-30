@@ -26,7 +26,10 @@
     "build": "yarn remove-build-folder && webpack --config ./source/webpack/webpack.main.prod.js --mode production --env prod && webpack --config ./source/webpack/webpack.renderer.prod.js --mode production --env prod",
     "package-mac": "yarn remove-release-folder-mac && node source/scripts/build-app.js --mac --publish=never",
     "package-linux": "yarn remove-release-folder-linux && node source/scripts/build-app.js --linux --publish=never",
-    "package-windows": "yarn remove-release-folder-win && node source/scripts/build-app.js --win --publish=never"
+    "package-windows": "yarn remove-release-folder-win && node source/scripts/build-app.js --win --publish=never",
+    "--- UNPACK ASAR FILE ---": "unpack asar file with yarn show-package",
+    "remove-unpacked-folder-on-unix": "rm -rf release/unpacked || true",
+    "show-package-mac": "yarn remove-unpacked-folder-on-unix && npx asar extract release-mac/mac/React.app/Contents/Resources/app.asar release/unpacked"
   },
   "repository": {
     "type": "git",
@@ -46,7 +49,6 @@
     "css-loader": "^6.7.1",
     "electron": "^20.1.0",
     "electron-builder": "^23.3.3",
-    "electron-is-dev": "^2.0.0",
     "eslint": "^8.17.0",
     "eslint-plugin-react": "^7.30.0",
     "file-loader": "^6.2.0",
@@ -73,6 +75,7 @@
     "async-mutex": "^0.3.2",
     "axios": "^0.27.2",
     "chalk": "3.0.0",
+    "electron-is-dev": "^2.0.0",
     "final-form": "^4.20.7",
     "node-polyglot": "^2.4.2",
     "process": "^0.11.10",
