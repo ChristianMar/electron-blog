@@ -18,7 +18,7 @@
     "--- RUN DEV ---": "run dev app with yarn electron-dev",
     "start-dev": "webpack-dev-server --config ./source/webpack/webpack.dev.js --mode development --env dev --no-devtool --hot",
     "--- FIX PROD FOLDER ---": "used by build",
-    "remove-build-folder": "rm -rf build || true",
+    "remove-build-folder": "rm -rf build/dist || true",
     "remove-release-folder-mac": "rm -rf release-mac || true",
     "remove-release-folder-win": "rm -rf release-win || true",
     "remove-release-folder-linux": "rm -rf release-linux || true",

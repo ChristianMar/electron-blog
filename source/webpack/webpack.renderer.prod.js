@@ -18,7 +18,7 @@ module.exports = (env, options) => {
     target: 'electron-preload',
     entry: path.join(rootPath, 'source', 'app', 'webapp', 'src', 'index.tsx'),
     output: {
-      path: path.resolve(__dirname, '../', '../', 'build'),
+      path: path.resolve(__dirname, '../', '../', 'build', 'dist'),
       filename: 'app.min.js',
       publicPath: '/',
     },

@@ -1,0 +1,8 @@
+{
+  "name": "electron-ts-base-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/background.min.js",
+  "scripts": {},
+  "dependencies": {}
+}

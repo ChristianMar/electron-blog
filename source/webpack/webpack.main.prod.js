@@ -16,7 +16,7 @@ module.exports = (env, options) => {
     target: 'electron-main',
     entry: path.resolve(__dirname, '../', 'electron', 'main.js'),
     output: {
-      path: path.resolve(__dirname, '../', '../', 'build'),
+      path: path.resolve(__dirname, '../', '../', 'build', 'dist'),
       filename: 'background.min.js',
     },
     node: {

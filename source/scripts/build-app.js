@@ -72,8 +72,9 @@ describe()
         data.APP_NAME
       }. All rights reserved`,
       buildVersion: buildName === 'win' ? version.replace('v', '') : version,
-      files: ['build', 'node_modules', 'package.json'],
+      files: ['**/*'],
       directories: {
+        app: 'build',
         output: `release-${buildName}`,
         buildResources: 'build',
       },
