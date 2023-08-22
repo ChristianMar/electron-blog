@@ -5,7 +5,7 @@ import {
   Menu,
   MenuItem,
   Typography,
-  Avatar
+  Avatar,
 } from '@mui/material';
 
 interface userMenu {
@@ -22,7 +22,7 @@ export const UserMenu = ({
   avatar,
   username,
   userMenu,
-  onUserMenuClick
+  onUserMenuClick,
 }: userMenu) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -37,7 +37,9 @@ export const UserMenu = ({
   return (
     <Box sx={{ flexGrow: 0 }}>
       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-        <Avatar alt={username} src={avatar} />
+        <Avatar alt={username} src={avatar}>
+          {!username ? 'A' : username.charAt(0)}
+        </Avatar>
       </IconButton>
       <Menu
         sx={{ mt: '45px' }}
@@ -45,12 +47,12 @@ export const UserMenu = ({
         anchorEl={anchorElUser}
         anchorOrigin={{
           vertical: 'top',
-          horizontal: 'right'
+          horizontal: 'right',
         }}
         keepMounted
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'right'
+          horizontal: 'right',
         }}
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
